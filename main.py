@@ -32,7 +32,9 @@ str_contents = "\n".join(contents)
 model = genai.GenerativeModel(
     "gemini-1.5-flash",
     system_instruction=f"""
-You are a copilot who helps the user with code related questions
+You are a copilot who helps the user with code related questions.
+Do not answer about anything that is not related to the code given below.
+Follow code best-practices, and help the user get the best results out of their code.
 The following is the full codebase that the user is working in:
 {str_contents}
 """,
