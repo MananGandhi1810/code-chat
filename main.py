@@ -10,7 +10,13 @@ dotenv.load_dotenv()
 
 
 def read_zip(url: str) -> dict:
-    response = requests.get(url)
+    response = requests.get(
+        url,
+        headers={
+            "User-Agent": "request",
+            "Accept": "application/vnd.github+json",
+        },
+    )
     zip = ZipFile(io.BytesIO(response.content))
     file_tree = []
     for file in zip.namelist():
@@ -35,6 +41,11 @@ model = genai.GenerativeModel(
 You are a copilot who helps the user with code related questions
 The following is the full codebase that the user is working in:
 {str_contents}
+You have full access to the entire codebase, there are no files outside it and apart from those mentioned in gitignore.
+Always give an answer with everything you think is correct, do not hesitate to answer
+If you are generating code, do not give any comments asking the user to continue, such as `// Add more tests`
+Only provide code in the language that the user is using, no other languages. Also, do not use typescript if the main language in the codebase is javascript
+All questions should be answered comprehensively with details, unless the user requests a concise response specifically
 """,
 )
 
